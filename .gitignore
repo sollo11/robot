@@ -3,3 +3,4 @@ _site/
 .DS_Store
 machine.min.js
 dist/
+.glitch-assets
