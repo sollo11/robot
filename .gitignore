@@ -5885,6 +5885,7 @@ nodemon.json
 ownership.yaml
 package-lock.json
 package.json
+<<<<<<< Updated upstream
 Procfile
 README.md
 script/anonymize-branch.js
@@ -26450,3 +26451,13 @@ translations/zh-CN/data/variables/product.yml
 translations/zh-CN/data/variables/search.yml
 translations/zh-CN/data/variables/valkyrie.yml
 webpack.config.js
+=======
+.glitch-assets
+README.md
+styles.css
+index.html
+styles.css
+README.md
+script.js
+styles.css
+>>>>>>> Stashed changes
