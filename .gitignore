@@ -3,3 +3,10 @@ _site/
 .DS_Store
 machine.min.js
 dist/
+<<<<<<< Updated upstream
+docs/api/options.md
+assets/images/-1zA-2/
+=======
+assets/images/-1zA-2/
+docs/api/options.md
+>>>>>>> Stashed changes
