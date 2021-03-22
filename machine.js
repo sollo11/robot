@@ -97,7 +97,7 @@ let invokeMachineType = {
         delete service.child;
         service.send({ type: 'done', data: s.context });
       }
-    }, service.context, event);
+    }, service.context, event, service.logger);
     if(service.child.machine.state.value.final) {
       let data = service.child.context;
       delete service.child;
@@ -143,8 +143,9 @@ export function createMachine(current, states, contextFn = empty) {
 }
 
 function transitionTo(service, machine, fromEvent, candidates) {
-  let { context } = service;
-  for(let { to, guards, reducers } of candidates) {  
+  let { context, logger } = service;
+  for(let { to, guards, reducers } of candidates) {
+
     if(guards(context, fromEvent)) {
       service.context = reducers.call(service, context, fromEvent);
 
@@ -154,6 +155,7 @@ function transitionTo(service, machine, fromEvent, candidates) {
         original: { value: original }
       });
 
+      logger(machine, to, service.context, context, fromEvent);
       let state = newMachine.state.value;
       return state.enter(newMachine, service, fromEvent);
     }
@@ -180,11 +182,12 @@ let service = {
   }
 };
 
-export function interpret(machine, onChange, initialContext, event) {
+export function interpret(machine, onChange, initialContext, event, logger = empty) {
   let s = Object.create(service, {
     machine: valueEnumerableWritable(machine),
     context: valueEnumerableWritable(machine.context(initialContext, event)),
-    onChange: valueEnumerable(onChange)
+    onChange: valueEnumerable(onChange),
+    logger: valueEnumerable(logger)
   });
   s.send = s.send.bind(s);
   s.machine = s.machine.state.value.enter(s.machine, s, event);

@@ -90,7 +90,8 @@ declare module 'robot3' {
     machine: M,
     onChange?: InterpretOnChangeFunction<typeof machine>,
     initialContext?: M['context'],
-    event?: { [K in keyof E]: any }
+    event?: { [K in keyof E]: any },
+    logger?: LogFunction<M>
   ): Service<typeof machine>
 
   /**
@@ -125,6 +126,8 @@ declare module 'robot3' {
 
   export type SendEvent = string | { type: string; [key: string]: any }
   export type SendFunction<T = SendEvent> = (event: T) => void
+  export type LogFunction<M extends Machine> =
+    <C = M['state']>(machine: M, to: string, state: C, prevState: C, event?: SendEvent) => void
 
   export type Machine<S = {}, C = {}, K = string> = {
     context: C
@@ -167,6 +170,7 @@ declare module 'robot3' {
     context: M['context']
     onChange: InterpretOnChangeFunction<M>
     send: SendFunction
+    logger: LogFunction<M>
   }
 
   export type Immediate = Transition
