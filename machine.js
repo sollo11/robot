@@ -99,31 +99,24 @@ let invokeType = {
     return machine;
   }
 };
-function machineToThen(machine) {
+function machineToPromise(machine) {
   return function(ctx, ev) {
-    return {
-      then: resolve => {
-        this.child = interpret(machine, s => {
-          this.onChange(s);
-          if(s.machine.state.value.final) {
-            resolve(s.context);
-          }
-        }, ctx, ev);
-        return { catch: identity };
-      }
-    };
+    return new Promise(resolve => {
+      this.child = interpret(machine, s => {
+        this.onChange(s);
+        if(s.machine.state.value.final) {
+          resolve(s.context);
+        }
+      }, ctx, ev);
+    });
   };
 }
 export function invoke(fn, ...transitions) {
   return create(invokeType, {
-    fn: valueEnumerable(machine.isPrototypeOf(fn) ? machineToThen(fn) : fn),
+    fn: valueEnumerable(machine.isPrototypeOf(fn) ? machineToPromise(fn) : fn),
     transitions: valueEnumerable(transitionsToMap(transitions))
   });
 }
-
-export let nested = (to, states) => invoke(createMachine(states, identity),
-  transition('done', to)
-);
 
 let machine = {
   get state() {
@@ -173,14 +166,6 @@ function send(service, event) {
 }
 
 let service = {
-  matches(query) {
-    let states = query.split('.'), matched = false, service = this;
-    do {
-      matched = !!service && states.shift() === service.machine.current;
-      service = service.child;
-    } while(matched && states.length);
-    return matched;
-  },
   send(event) {
     this.machine = send(this, event);
     
