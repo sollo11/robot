@@ -1,9 +1,4 @@
-node_modules/
-_site/
-.DS_Store
-machine.min.js
-dist/
-.glitch-assets
+
 .all-contributorsrc
 .env.example
 .gitattributes
@@ -51,7 +46,7 @@ dist/
 .pa11yci
 .vscode/settings.json
 app.json
-assets/images/-1zA-2/
+assets/images/-1zA-2
 assets/images/actions-manually-run-workflow.png
 assets/images/actions-select-workflow.png
 assets/images/actions-workflow-dispatch.png
